@@ -125,6 +125,10 @@ h1, h2 { font-family: var(--font-display); margin: 0; }
   margin-bottom: 24px;
 }
 
+.ticket[hidden] {
+  display: none;
+}
+
 .ticket__accent {
   width: 6px;
   background: var(--orange);
