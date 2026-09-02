@@ -1,0 +1,457 @@
+/* ==========================================================================
+   Le Voyage Heure — jetons de design
+   ========================================================================== */
+:root {
+  --navy: #16294B;
+  --navy-dark: #0F1D38;
+  --orange: #F2A73D;
+  --orange-dark: #D98A1D;
+  --cream: #FBFAF7;
+  --white: #FFFFFF;
+  --ink: #1F2733;
+  --muted: #6B7280;
+  --border: #E4E1D8;
+  --success: #2F9E58;
+  --success-bg: #EAF6EE;
+  --danger: #C0392B;
+  --radius: 10px;
+  --shadow: 0 1px 3px rgba(22, 41, 75, 0.10);
+  --font-display: 'Poppins', sans-serif;
+  --font-body: 'Inter', sans-serif;
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--cream);
+  color: var(--ink);
+  font-family: var(--font-body);
+}
+
+h1, h2 { font-family: var(--font-display); margin: 0; }
+
+/* ==========================================================================
+   En-tête
+   ========================================================================== */
+.site-header {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 20px 24px;
+  background: var(--white);
+  border-bottom: 3px solid var(--navy);
+}
+
+.site-header__logo {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+.site-header__text h1 {
+  font-size: 1.3rem;
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.site-header__text p {
+  margin: 2px 0 0;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+/* ==========================================================================
+   Mise en page générale
+   ========================================================================== */
+.page {
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 32px 20px 60px;
+}
+
+.admin-body .page { max-width: 720px; }
+
+/* ==========================================================================
+   Sélecteur d'onglets (Ouverture / Fermeture)
+   ========================================================================== */
+.switcher {
+  display: flex;
+  width: fit-content;
+  margin: 0 auto 24px;
+  background: var(--navy);
+  border-radius: 999px;
+  padding: 4px;
+}
+
+.switcher__option {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 10px 30px;
+  border: none;
+  background: transparent;
+  color: rgba(255, 255, 255, 0.65);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background 0.15s ease, color 0.15s ease;
+}
+
+.switcher__option.is-active {
+  background: var(--orange);
+  color: var(--navy);
+}
+
+.switcher__option:not(.is-active):hover {
+  color: var(--white);
+}
+
+/* ==========================================================================
+   Carte "billet" (checklist / login / éditeur)
+   ========================================================================== */
+.ticket {
+  display: flex;
+  background: var(--white);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  margin-bottom: 24px;
+}
+
+.ticket__accent {
+  width: 6px;
+  background: var(--orange);
+  flex-shrink: 0;
+}
+
+.ticket__accent--success { background: var(--success); }
+
+.ticket__body {
+  flex: 1;
+  padding: 28px 28px 32px;
+}
+
+.ticket__body--center {
+  text-align: center;
+}
+
+.ticket__header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.ticket__header h2 {
+  font-size: 1.15rem;
+  color: var(--navy);
+}
+
+.ticket__date {
+  font-size: 0.82rem;
+  color: var(--muted);
+}
+
+.ticket--success h2 { color: var(--success); font-size: 1.3rem; }
+.ticket--success p { color: var(--muted); margin: 10px 0 22px; }
+
+/* ==========================================================================
+   Champs de formulaire
+   ========================================================================== */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.field__label {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.field input {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 11px 12px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--cream);
+  color: var(--ink);
+}
+
+.field input:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 1px;
+  background: var(--white);
+}
+
+/* ==========================================================================
+   Liste de check-list (page employé)
+   ========================================================================== */
+.checklist {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 20px 0 24px;
+}
+
+.checklist__empty {
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 20px 0;
+}
+
+.check-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+
+.check-item:hover { border-color: var(--orange); }
+
+.check-item input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  accent-color: var(--orange);
+  flex-shrink: 0;
+}
+
+.check-item.is-checked {
+  background: rgba(242, 167, 61, 0.08);
+  border-color: var(--orange);
+}
+
+.check-item span {
+  font-size: 0.97rem;
+  color: var(--ink);
+}
+
+.text-item {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.text-item span {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--navy);
+}
+
+.text-item input {
+  font-family: var(--font-body);
+  font-size: 0.95rem;
+  padding: 9px 11px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--cream);
+}
+
+.text-item input:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 1px;
+  background: var(--white);
+}
+
+/* ==========================================================================
+   Boutons
+   ========================================================================== */
+.btn {
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  padding: 14px 20px;
+  cursor: pointer;
+  transition: transform 0.1s ease, background 0.15s ease;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--navy);
+  outline-offset: 2px;
+}
+
+.btn--primary {
+  background: var(--orange);
+  color: var(--navy);
+  width: 100%;
+}
+
+.btn--primary:hover { background: var(--orange-dark); }
+.btn--primary:active { transform: scale(0.99); }
+.btn--primary:disabled { opacity: 0.6; cursor: not-allowed; }
+
+.btn--ghost {
+  background: transparent;
+  border: 1px solid var(--navy);
+  color: var(--navy);
+}
+
+.btn--ghost:hover { background: rgba(22, 41, 75, 0.06); }
+
+.btn--small {
+  padding: 8px 14px;
+  font-size: 0.85rem;
+}
+
+.form-note {
+  margin: 12px 0 0;
+  font-size: 0.85rem;
+  min-height: 1.1em;
+  color: var(--muted);
+}
+
+.form-note.is-error { color: var(--danger); }
+.form-note.is-success { color: var(--success); }
+
+/* ==========================================================================
+   Pied de page
+   ========================================================================== */
+.site-footer {
+  text-align: center;
+  padding: 20px 0 40px;
+}
+
+.site-footer a {
+  color: var(--muted);
+  font-size: 0.8rem;
+  text-decoration: none;
+}
+
+.site-footer a:hover { color: var(--navy); text-decoration: underline; }
+
+/* ==========================================================================
+   Administration
+   ========================================================================== */
+#login-card { max-width: 420px; margin: 40px auto 24px; }
+
+.admin-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  font-size: 0.85rem;
+  color: var(--muted);
+}
+
+.editor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.editor-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  background: var(--cream);
+}
+
+.editor-row input[type="text"] {
+  flex: 1;
+  min-width: 0;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  padding: 9px 10px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--white);
+}
+
+.editor-row select {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  padding: 9px 8px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: var(--white);
+  flex-shrink: 0;
+}
+
+.editor-row__moves {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  flex-shrink: 0;
+}
+
+.editor-row__moves button,
+.editor-row__delete {
+  border: 1px solid var(--border);
+  background: var(--white);
+  border-radius: 6px;
+  width: 28px;
+  height: 24px;
+  cursor: pointer;
+  color: var(--muted);
+  font-size: 0.8rem;
+  line-height: 1;
+}
+
+.editor-row__delete {
+  height: 100%;
+  width: 32px;
+  color: var(--danger);
+  border-color: var(--danger);
+  flex-shrink: 0;
+}
+
+.editor-row__moves button:hover { background: var(--cream); }
+.editor-row__delete:hover { background: #FCEEEC; }
+
+.editor-actions {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 16px;
+  flex-wrap: wrap;
+}
+
+.editor-empty {
+  color: var(--muted);
+  font-size: 0.88rem;
+  padding: 10px 0;
+}
+
+/* ==========================================================================
+   Animation d'apparition (un seul moment orchestré)
+   ========================================================================== */
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.ticket--success:not([hidden]) { animation: cardIn 0.35s ease; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ==========================================================================
+   Responsive
+   ========================================================================== */
+@media (max-width: 480px) {
+  .site-header__text h1 { font-size: 1.1rem; }
+  .ticket__body { padding: 22px 18px 26px; }
+  .switcher__option { padding: 10px 22px; font-size: 0.9rem; }
+  .editor-row { flex-wrap: wrap; }
+}

@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Administration — Le Voyage Heure</title>
+  <link rel="icon" href="assets/logo.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body class="admin-body">
+
+  <header class="site-header">
+    <img src="assets/logo.png" alt="Le Voyage Heure" class="site-header__logo">
+    <div class="site-header__text">
+      <h1>Le Voyage Heure</h1>
+      <p>Administration des check-lists</p>
+    </div>
+  </header>
+
+  <main class="page">
+
+    <!-- Écran de connexion -->
+    <section class="ticket" id="login-card">
+      <div class="ticket__accent"></div>
+      <div class="ticket__body">
+        <h2>Connexion</h2>
+        <label class="field">
+          <span class="field__label">E-mail</span>
+          <input type="email" id="login-email" autocomplete="username">
+        </label>
+        <label class="field">
+          <span class="field__label">Mot de passe</span>
+          <input type="password" id="login-password" autocomplete="current-password">
+        </label>
+        <button class="btn btn--primary" id="login-btn" type="button">Se connecter</button>
+        <p class="form-note" id="login-note" role="status"></p>
+      </div>
+    </section>
+
+    <!-- Panneau d'administration -->
+    <div id="admin-panel" hidden>
+
+      <div class="admin-topbar">
+        <span id="admin-user"></span>
+        <button class="btn btn--ghost btn--small" id="logout-btn" type="button">Se déconnecter</button>
+      </div>
+
+      <div class="switcher" role="tablist" aria-label="Choix de la check-list à modifier">
+        <button class="switcher__option is-active" data-tab="ouverture" role="tab" aria-selected="true" type="button">Ouverture</button>
+        <button class="switcher__option" data-tab="fermeture" role="tab" aria-selected="false" type="button">Fermeture</button>
+      </div>
+
+      <section class="ticket">
+        <div class="ticket__accent"></div>
+        <div class="ticket__body">
+          <div class="ticket__header">
+            <h2 id="editor-title">Questions — Ouverture</h2>
+          </div>
+
+          <div id="editor-list" class="editor-list"></div>
+
+          <div class="editor-actions">
+            <button class="btn btn--ghost btn--small" id="add-item-btn" type="button">+ Ajouter une question</button>
+            <button class="btn btn--ghost btn--small" id="seed-btn" type="button">Charger des exemples</button>
+          </div>
+
+          <button class="btn btn--primary" id="save-items-btn" type="button">Enregistrer les modifications</button>
+          <p class="form-note" id="editor-note" role="status"></p>
+        </div>
+      </section>
+
+      <section class="ticket">
+        <div class="ticket__accent"></div>
+        <div class="ticket__body">
+          <h2>Paramètres</h2>
+          <label class="field">
+            <span class="field__label">Adresse e-mail de réception</span>
+            <input type="email" id="settings-email" placeholder="contact@exemple.com">
+          </label>
+          <button class="btn btn--primary" id="save-settings-btn" type="button">Enregistrer l'adresse</button>
+          <p class="form-note" id="settings-note" role="status"></p>
+        </div>
+      </section>
+
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <a href="index.html">← Retour à la check-list</a>
+  </footer>
+
+  <!-- Firebase -->
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.13.0/firebase-firestore-compat.js"></script>
+
+  <script src="js/firebase-config.js"></script>
+  <script src="js/admin.js"></script>
+</body>
+</html>
