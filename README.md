@@ -1,9 +1,10 @@
 # Le Voyage Heure — Check-list d'équipe
 
-Site interne pour vos employés : une page avec deux check-lists (**Ouverture** /
-**Fermeture**), à cocher ou à compléter, envoyées par e-mail en un clic. Une
-page cachée protégée par mot de passe permet de configurer les questions et
-l'adresse e-mail de réception.
+Site interne pour vos employés : une page avec trois check-lists
+(**Ouverture**, **Fin de service**, **Fermeture du bar**), à cocher ou à
+compléter, envoyées par e-mail en un clic. Une page cachée protégée par mot
+de passe permet de configurer les questions et l'adresse e-mail de
+réception.
 
 ## Arborescence
 
@@ -86,14 +87,20 @@ jour).
    - **To Email** (dans les réglages du template, pas dans le corps) :
      `{{to_email}}`
    - **Subject** : `Check-list {{list_type}} — {{date}}`
-   - **Content** :
+   - **Content** (le champ `{{content}}` liste automatiquement TOUTES les
+     questions de la check-list remplie, avec leur réponse — case cochée,
+     non cochée, ou texte saisi — sans que vous ayez à modifier ce template
+     quand vous ajoutez/supprimez des questions dans l'admin) :
      ```
      Check-list : {{list_type}}
      Rempli par : {{employee_name}}
      Date : {{date}}
 
-     {{content}}
+     <pre style="font-family: inherit; white-space: pre-wrap;">{{content}}</pre>
      ```
+     La balise `<pre>` est nécessaire : sans elle, les emails HTML
+     ignorent les retours à la ligne et tout le contenu s'afficherait sur une
+     seule ligne.
    Notez le **Template ID**.
 4. **Account > API Keys** : copiez la **Public Key**.
 5. Collez ces trois valeurs (`EMAILJS_SERVICE_ID`, `EMAILJS_TEMPLATE_ID`,
@@ -103,8 +110,9 @@ jour).
 
 1. Ouvrez `admin.html` (en local, ou une fois déployé — voir étape 4).
 2. Connectez-vous avec l'e-mail/mot de passe créé à l'étape 1.5.
-3. Pour chaque onglet (Ouverture / Fermeture) : cliquez sur **Charger des
-   exemples** pour démarrer avec des questions types, puis modifiez-les,
+3. Pour chacun des trois onglets (Ouverture / Fin de service / Fermeture du
+   bar) : cliquez sur **Charger des exemples** pour démarrer avec des
+   questions types, puis modifiez-les,
    ajoutez-en, supprimez-en, changez leur type (case à cocher ou champ texte),
    réordonnez-les avec les flèches. Cliquez sur **Enregistrer les
    modifications**.
@@ -145,7 +153,7 @@ Toutes ces modifications sont immédiatement visibles par vos employés sur
   trace est l'e-mail reçu. Un historique consultable en ligne (via Firestore)
   pourrait être ajouté plus tard si besoin.
 - EmailJS gratuit est limité à 200 e-mails/mois, largement suffisant pour un
-  usage quotidien (~60/mois pour une ouverture et une fermeture par jour),
-  mais à surveiller si vous avez plusieurs établissements.
+  usage quotidien (~90/mois pour les trois check-lists remplies chaque
+  jour), mais à surveiller si vous avez plusieurs établissements.
 - Un seul type de champ texte est disponible (texte libre) ; pas de nombres,
   listes déroulantes, etc. pour rester simple.
