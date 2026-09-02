@@ -8,11 +8,18 @@
       { id: gen(), label: "Relever la température des frigos", type: "text", order: 2 },
       { id: gen(), label: "Ouvrir les volets / rideaux", type: "checkbox", order: 3 }
     ],
+    fin_service: [
+      { id: gen(), label: "Annoncer la dernière commande", type: "checkbox", order: 0 },
+      { id: gen(), label: "Arrêter la musique / ambiance", type: "checkbox", order: 1 },
+      { id: gen(), label: "Nombre de couverts servis", type: "text", order: 2 },
+      { id: gen(), label: "Remarques particulières", type: "text", order: 3 }
+    ],
     fermeture: [
-      { id: gen(), label: "Éteindre les appareils électriques", type: "checkbox", order: 0 },
-      { id: gen(), label: "Fermer et vérifier la caisse", type: "checkbox", order: 1 },
-      { id: gen(), label: "Sortir les poubelles", type: "checkbox", order: 2 },
-      { id: gen(), label: "Remarques sur la journée", type: "text", order: 3 }
+      { id: gen(), label: "Fermer et vérifier la caisse du bar", type: "checkbox", order: 0 },
+      { id: gen(), label: "Ranger et nettoyer le comptoir", type: "checkbox", order: 1 },
+      { id: gen(), label: "Vérifier les stocks de boissons", type: "checkbox", order: 2 },
+      { id: gen(), label: "Sortir les poubelles", type: "checkbox", order: 3 },
+      { id: gen(), label: "Remarques sur la soirée", type: "text", order: 4 }
     ]
   };
 
@@ -22,7 +29,7 @@
 
   const state = {
     currentTab: "ouverture",
-    items: { ouverture: [], fermeture: [] },
+    items: { ouverture: [], fin_service: [], fermeture: [] },
     settingsEmail: ""
   };
 
@@ -48,7 +55,11 @@
   const saveSettingsBtn = document.getElementById("save-settings-btn");
   const settingsNote = document.getElementById("settings-note");
 
-  const TAB_LABELS = { ouverture: "Ouverture", fermeture: "Fermeture" };
+  const TAB_LABELS = {
+    ouverture: "Ouverture",
+    fin_service: "Fin de service",
+    fermeture: "Fermeture du bar"
+  };
 
   // ---- Authentification -------------------------------------------------------
   if (!auth) {
@@ -111,11 +122,13 @@
   function loadConfig() {
     Promise.all([
       db.collection("config").doc("ouverture").get(),
+      db.collection("config").doc("fin_service").get(),
       db.collection("config").doc("fermeture").get(),
       db.collection("config").doc("settings").get()
     ])
-      .then(([ouvertureSnap, fermetureSnap, settingsSnap]) => {
+      .then(([ouvertureSnap, finServiceSnap, fermetureSnap, settingsSnap]) => {
         state.items.ouverture = (ouvertureSnap.exists && ouvertureSnap.data().items) || [];
+        state.items.fin_service = (finServiceSnap.exists && finServiceSnap.data().items) || [];
         state.items.fermeture = (fermetureSnap.exists && fermetureSnap.data().items) || [];
         state.settingsEmail = (settingsSnap.exists && settingsSnap.data().emailTo) || "";
         settingsEmailInput.value = state.settingsEmail;

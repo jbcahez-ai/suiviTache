@@ -1,11 +1,21 @@
 (function () {
   "use strict";
 
-  const TAB_LABELS = { ouverture: "Ouverture", fermeture: "Fermeture" };
+  const TAB_LABELS = {
+    ouverture: "Ouverture",
+    fin_service: "Fin de service",
+    fermeture: "Fermeture du bar"
+  };
+
+  const TAB_TITLES = {
+    ouverture: "Check-list d'ouverture",
+    fin_service: "Check-list de fin de service",
+    fermeture: "Check-list de fermeture du bar"
+  };
 
   const state = {
     currentTab: "ouverture",
-    items: { ouverture: [], fermeture: [] },
+    items: { ouverture: [], fin_service: [], fermeture: [] },
     settings: { emailTo: "" },
     loaded: false
   };
@@ -26,13 +36,15 @@
 
   // ---- Chargement de la configuration depuis Firestore ---------------------
   function loadConfig() {
-    const ouvertureRef = db.collection("config").doc("ouverture").get();
-    const fermetureRef = db.collection("config").doc("fermeture").get();
-    const settingsRef = db.collection("config").doc("settings").get();
-
-    Promise.all([ouvertureRef, fermetureRef, settingsRef])
-      .then(([ouvertureSnap, fermetureSnap, settingsSnap]) => {
+    Promise.all([
+      db.collection("config").doc("ouverture").get(),
+      db.collection("config").doc("fin_service").get(),
+      db.collection("config").doc("fermeture").get(),
+      db.collection("config").doc("settings").get()
+    ])
+      .then(([ouvertureSnap, finServiceSnap, fermetureSnap, settingsSnap]) => {
         state.items.ouverture = (ouvertureSnap.exists && ouvertureSnap.data().items) || [];
+        state.items.fin_service = (finServiceSnap.exists && finServiceSnap.data().items) || [];
         state.items.fermeture = (fermetureSnap.exists && fermetureSnap.data().items) || [];
         state.settings = (settingsSnap.exists && settingsSnap.data()) || { emailTo: "" };
         state.loaded = true;
@@ -48,8 +60,7 @@
   // ---- Rendu de la check-list active ---------------------------------------
   function renderChecklist() {
     const tab = state.currentTab;
-    checklistTitle.textContent =
-      tab === "ouverture" ? "Check-list d'ouverture" : "Check-list de fermeture";
+    checklistTitle.textContent = TAB_TITLES[tab];
 
     checklistDate.textContent = new Date().toLocaleDateString("fr-FR", {
       weekday: "long",
