@@ -102,6 +102,7 @@ jour).
      Check-list : {{list_type}}
      Rempli par : {{employee_name}}
      Date : {{date}}
+     Appareil : {{device}}
 
      <pre style="font-family: inherit; white-space: pre-wrap;">{{content}}</pre>
      ```
@@ -152,6 +153,17 @@ jour donnée à l'étape 1.3 ci-dessous (elle ajoute les autorisations pour la
 collection `submissions`). Sans cette mise à jour, l'enregistrement échouera
 et vos employés verront un message d'erreur en validant. Aucune autre
 manipulation Firebase ou EmailJS n'est nécessaire.
+
+## Mise à jour : appareil utilisé
+
+Chaque check-list enregistre maintenant aussi **l'appareil utilisé** (ex.
+"Android – Chrome"), déterminé automatiquement, sans rien demander à
+l'employé et sans autorisation particulière.
+
+**Action nécessaire** : ajoutez la ligne `Appareil : {{device}}` à votre
+template EmailJS (voir le contenu complet à l'étape 2 ci-dessus). Sans ça,
+l'e-mail sera envoyé mais cette information n'apparaîtra pas dedans (elle
+reste quand même visible dans l'historique de l'admin).
 
 ## Points de sécurité à connaître
 
