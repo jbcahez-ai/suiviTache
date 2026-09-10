@@ -6,12 +6,12 @@
 // 1) Configuration de votre projet Firebase
 // (Firebase console > Paramètres du projet > Vos applications > Config SDK)
 const firebaseConfig = {
-  apiKey: "AIzaSyCxXnGr1r4MpZ0oxrEPu-YVHYHkZs7dyZg",
-  authDomain: "le-voyage-heure-20ad4.firebaseapp.com",
-  projectId: "le-voyage-heure-20ad4",
-  storageBucket: "le-voyage-heure-20ad4.firebasestorage.app",
-  messagingSenderId: "142336244896",
-  appId: "1:142336244896:web:a21c69620a897948059dc5"
+  apiKey: "REMPLACER_API_KEY",
+  authDomain: "REMPLACER.firebaseapp.com",
+  projectId: "REMPLACER",
+  storageBucket: "REMPLACER.appspot.com",
+  messagingSenderId: "REMPLACER",
+  appId: "REMPLACER"
 };
 
 firebase.initializeApp(firebaseConfig);
@@ -23,9 +23,9 @@ const auth = typeof firebase.auth === "function" ? firebase.auth() : null;
 
 // 2) Identifiants EmailJS
 // (emailjs.com > Email Services / Email Templates / Account > API Keys)
-const EMAILJS_PUBLIC_KEY = "vwmtIxSLYhn-6lLV-";
-const EMAILJS_SERVICE_ID = "service_vrrteix";
-const EMAILJS_TEMPLATE_ID = "template_cdedn2k";
+const EMAILJS_PUBLIC_KEY = "REMPLACER_PUBLIC_KEY";
+const EMAILJS_SERVICE_ID = "REMPLACER_SERVICE_ID";
+const EMAILJS_TEMPLATE_ID = "REMPLACER_TEMPLATE_ID";
 
 // emailjs n'est chargé que sur index.html
 if (typeof emailjs !== "undefined") {

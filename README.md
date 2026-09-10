@@ -54,13 +54,20 @@ jour).
          allow read: if true;
          allow write: if request.auth != null;
        }
+       match /submissions/{document} {
+         allow create: if true;
+         allow read, update, delete: if request.auth != null;
+       }
      }
    }
    ```
 
    → Tout le monde peut *lire* la configuration (nécessaire pour que la page
    employés affiche les questions), mais seule une personne *connectée*
-   (vous, via la page admin) peut la *modifier*.
+   (vous, via la page admin) peut la *modifier*. La collection
+   `submissions` (l'historique des check-lists remplies) fonctionne à
+   l'inverse : n'importe qui peut *créer* une entrée en validant une
+   check-list, mais seule une personne connectée peut la *consulter*.
 
 4. Dans le menu de gauche, allez dans **Compilation > Authentication**,
    cliquez sur **Commencer**, puis activez le fournisseur **E-mail/Mot de
@@ -129,6 +136,22 @@ Toutes ces modifications sont immédiatement visibles par vos employés sur
    branche `main` et le dossier `/ (root)`, puis **Save**.
 3. Après une à deux minutes, votre site est accessible à l'adresse
    `https://votre-nom-utilisateur.github.io/nom-du-depot/`.
+
+## Mise à jour : historique des envois
+
+Chaque check-list validée est désormais enregistrée dans Firestore (dans une
+nouvelle collection `submissions`), **avant même** la tentative d'envoi de
+l'e-mail. Vous pouvez la consulter dans un nouvel onglet **Historique des
+envois** en bas de la page admin : nom de la personne, date, contenu complet,
+et statut (e-mail envoyé / échec / en cours). Ainsi, même si un e-mail ne
+part pas ou n'arrive pas, la check-list remplie n'est jamais perdue.
+
+**Action nécessaire si votre projet Firebase existe déjà** : retournez dans
+*Firestore Database > Règles* et remplacez le contenu par la version mise à
+jour donnée à l'étape 1.3 ci-dessous (elle ajoute les autorisations pour la
+collection `submissions`). Sans cette mise à jour, l'enregistrement échouera
+et vos employés verront un message d'erreur en validant. Aucune autre
+manipulation Firebase ou EmailJS n'est nécessaire.
 
 ## Points de sécurité à connaître
 

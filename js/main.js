@@ -217,20 +217,47 @@
     }
 
     submitBtn.disabled = true;
-    formNote.textContent = "Envoi en cours…";
+    formNote.textContent = "Enregistrement…";
 
-    emailjs
-      .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
-      .then(() => {
-        successText.textContent =
-          "La check-list « " + TAB_LABELS[tab] + " » a été envoyée par e-mail.";
-        checklistCard.hidden = true;
-        successCard.hidden = false;
-        formNote.textContent = "";
+    // On enregistre d'abord la check-list dans Firestore : même si l'envoi de
+    // l'e-mail échoue ensuite, la saisie n'est jamais perdue et reste
+    // consultable dans l'historique de la page admin.
+    db.collection("submissions")
+      .add({
+        tab: tab,
+        employeeName: employeeName,
+        content: content,
+        createdAt: firebase.firestore.FieldValue.serverTimestamp(),
+        emailStatus: "pending"
+      })
+      .then((docRef) => {
+        formNote.textContent = "Envoi de l'e-mail…";
+        return emailjs
+          .send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams)
+          .then(() => {
+            docRef.update({ emailStatus: "sent" }).catch(() => {});
+            successText.textContent =
+              "La check-list « " + TAB_LABELS[tab] + " » a été envoyée par e-mail.";
+            checklistCard.hidden = true;
+            successCard.hidden = false;
+            formNote.textContent = "";
+          })
+          .catch((err) => {
+            console.error(err);
+            docRef
+              .update({ emailStatus: "failed", emailError: String((err && err.text) || err) })
+              .catch(() => {});
+            successText.textContent =
+              "La check-list a bien été enregistrée, mais l'e-mail n'a pas pu être envoyé. " +
+              "Le gérant pourra la consulter dans l'historique de l'administration.";
+            checklistCard.hidden = true;
+            successCard.hidden = false;
+            formNote.textContent = "";
+          });
       })
       .catch((err) => {
         console.error(err);
-        formNote.textContent = "L'envoi a échoué. Vérifiez la connexion et réessayez.";
+        formNote.textContent = "L'enregistrement a échoué. Vérifiez la connexion et réessayez.";
         formNote.classList.add("is-error");
       })
       .finally(() => {

@@ -55,6 +55,9 @@
   const saveSettingsBtn = document.getElementById("save-settings-btn");
   const settingsNote = document.getElementById("settings-note");
 
+  const historyList = document.getElementById("history-list");
+  const refreshHistoryBtn = document.getElementById("refresh-history-btn");
+
   const TAB_LABELS = {
     ouverture: "Ouverture",
     fin_service: "Fin de service",
@@ -72,6 +75,7 @@
         adminPanel.hidden = false;
         adminUser.textContent = "Connecté en tant que " + user.email;
         loadConfig();
+        loadHistory();
       } else {
         loginCard.hidden = false;
         adminPanel.hidden = true;
@@ -298,6 +302,68 @@
         editorNote.classList.add("is-error");
       });
   });
+
+  // ---- Historique des envois -------------------------------------------------
+  function escapeHtml(str) {
+    const div = document.createElement("div");
+    div.textContent = str || "";
+    return div.innerHTML;
+  }
+
+  function loadHistory() {
+    historyList.innerHTML = '<p class="editor-empty">Chargement…</p>';
+    db.collection("submissions")
+      .orderBy("createdAt", "desc")
+      .limit(50)
+      .get()
+      .then((snap) => {
+        if (snap.empty) {
+          historyList.innerHTML =
+            '<p class="editor-empty">Aucun envoi enregistré pour le moment.</p>';
+          return;
+        }
+        historyList.innerHTML = "";
+        snap.forEach((doc) => {
+          const d = doc.data();
+          const date = d.createdAt && d.createdAt.toDate ? d.createdAt.toDate() : null;
+          const dateStr = date
+            ? date.toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short" })
+            : "date inconnue";
+          const statusBadge =
+            d.emailStatus === "sent"
+              ? '<span class="badge badge--sent">E-mail envoyé</span>'
+              : d.emailStatus === "failed"
+              ? '<span class="badge badge--failed">Échec e-mail</span>'
+              : '<span class="badge badge--pending">En cours</span>';
+
+          const item = document.createElement("div");
+          item.className = "history-item";
+          item.innerHTML =
+            '<div class="history-item__header">' +
+            '<span class="history-item__name">' +
+            escapeHtml(d.employeeName || "Non renseigné") +
+            "</span>" +
+            '<span class="badge badge--tab">' +
+            escapeHtml(TAB_LABELS[d.tab] || d.tab || "") +
+            "</span>" +
+            statusBadge +
+            "<span>" +
+            dateStr +
+            "</span>" +
+            "</div>" +
+            '<pre class="history-item__content">' +
+            escapeHtml(d.content || "") +
+            "</pre>";
+          historyList.appendChild(item);
+        });
+      })
+      .catch((err) => {
+        console.error(err);
+        historyList.innerHTML = '<p class="editor-empty">Impossible de charger l\'historique.</p>';
+      });
+  }
+
+  refreshHistoryBtn.addEventListener("click", loadHistory);
 
   // ---- Paramètres (adresse e-mail) -----------------------------------------
   saveSettingsBtn.addEventListener("click", () => {
