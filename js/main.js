@@ -114,6 +114,26 @@
     return div.innerHTML;
   }
 
+  // ---- Appareil (facultatif, sans permission requise) -----------------------
+  function getDeviceInfo() {
+    const ua = navigator.userAgent;
+    let os = "Appareil inconnu";
+    if (/Windows/i.test(ua)) os = "Windows";
+    else if (/Android/i.test(ua)) os = "Android";
+    else if (/iPhone|iPad|iPod/i.test(ua)) os = "iOS";
+    else if (/Macintosh/i.test(ua)) os = "Mac";
+    else if (/Linux/i.test(ua)) os = "Linux";
+
+    let browser = "";
+    if (/Edg\//i.test(ua)) browser = "Edge";
+    else if (/OPR\//i.test(ua)) browser = "Opera";
+    else if (/Chrome\//i.test(ua)) browser = "Chrome";
+    else if (/Firefox\//i.test(ua)) browser = "Firefox";
+    else if (/Safari\//i.test(ua)) browser = "Safari";
+
+    return browser ? os + " – " + browser : os;
+  }
+
   // ---- Changement d'onglet --------------------------------------------------
   function switchTab(tab) {
     state.currentTab = tab;
@@ -219,6 +239,9 @@
     submitBtn.disabled = true;
     formNote.textContent = "Enregistrement…";
 
+    const deviceInfo = getDeviceInfo();
+    templateParams.device = deviceInfo;
+
     // On enregistre d'abord la check-list dans Firestore : même si l'envoi de
     // l'e-mail échoue ensuite, la saisie n'est jamais perdue et reste
     // consultable dans l'historique de la page admin.
@@ -227,6 +250,7 @@
         tab: tab,
         employeeName: employeeName,
         content: content,
+        device: deviceInfo,
         createdAt: firebase.firestore.FieldValue.serverTimestamp(),
         emailStatus: "pending"
       })

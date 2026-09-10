@@ -338,6 +338,10 @@
 
           const item = document.createElement("div");
           item.className = "history-item";
+
+          const metaBits = [];
+          if (d.device) metaBits.push("Appareil : " + escapeHtml(d.device));
+
           item.innerHTML =
             '<div class="history-item__header">' +
             '<span class="history-item__name">' +
@@ -351,6 +355,9 @@
             dateStr +
             "</span>" +
             "</div>" +
+            (metaBits.length
+              ? '<p class="history-item__meta">' + metaBits.join(" · ") + "</p>"
+              : "") +
             '<pre class="history-item__content">' +
             escapeHtml(d.content || "") +
             "</pre>";
